@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kurumsal E-posta İmza Oluşturucu</title>
+    <link rel="icon" type="image/x-icon" href="images/Tasi.png" />
+    <style>
+      body {
+        font-family: "Roboto", sans-serif;
+        background-color: #ffffff;
+        margin: 0;
+        padding: 20px;
+      }
+
+      ::placeholder {
+        color: #bebebe;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 0px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+
+      .logo {
+        max-width: 150px;
+        margin-bottom: 20px;
+      }
+      
+
+      h1 {
+        font-size: 24px;
+        font-style: italic;
+        margin-bottom: 20px;
+        color: #000000;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+      }
+
+      form {
+        background: linear-gradient(135deg, #044b8a, #022545, #011b38);
+        padding: 20px;
+        border-radius: 30px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      label {
+        display: block;
+        margin-top: 10px;
+        font-weight: bold;
+        font-size: 14px;
+        color: #fff;
+        text-align: center;
+      }
+
+      input[type="text"],
+      input[type="email"],
+      input[type="url"] {
+        width: 100%;
+        max-width: 400px;
+        padding: 10px;
+        margin-top: 5px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #fff;
+        color: #000;
+      }
+
+      button {
+        background: linear-gradient(135deg, #d82638, #ba202e, #a51c29);
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        display: block;
+        margin: 20px auto;
+      }
+
+      button:hover {
+        background: linear-gradient(135deg, #ba202e, #a51c29, #d82638);
+      }
+
+      #signatureContainer {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        max-width: 700px;
+        margin: 0 auto;
+      }
+
+      #signatureSection {
+        background-color: linear-gradient(135deg, #044b8a, #022545, #011b38);
+        padding: 20px;
+        border-radius: 8px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      #signaturePreview {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-top: 20px;
+        white-space: pre-wrap;
+        background: #fff;
+        box-sizing: border-box;
+      }
+
+      #bannerSection {
+        background: #ffffff;
+        width: 100%;
+        box-sizing: border-box;
+        margin: 0; /* Yukarıdaki boşluğu kaldırıyoruz */
+        padding: 4px; /* Yukarıdaki boşluğu kaldırıyoruz */
+        position: relative;
+      }
+
+      #bannerSection img {
+        object-fit: cover;
+        border-radius: 8px;
+        width: 100%; /* Tam genişlik */
+        height: auto; /* Yüksekliği otomatik ayarlanır */
+        display: block;
+      }
+
+      .signature-table {
+        width: 100%;
+        table-layout: fixed;
+        border-collapse: collapse;
+      }
+
+      .signature-table .right td {
+        vertical-align: middle;
+      }
+
+      .signature-table .right {
+        width: 40%; /* Ensure the right column takes up the remaining space */
+        text-align: center;
+        padding-left: 30px;
+        justify-content: center;
+        position: sticky;
+      }
+
+      .signature-table .left {
+        width: 60%; /* Increase width as needed */
+        padding-right: 25px;
+        text-align: left;
+        font-size: 12px;
+        line-height: normal;
+        max-width: 500px; /* Optional: Adjust max-width if needed */
+        word-wrap: break-word; /* Uzun kelimelerin ve metinlerin kutuyu aşmasını önler */
+        overflow-wrap: break-word;
+        
+        
+      }
+      
+
+      
+      .title-font {
+        font-size: 14px; /* Ünvan için yazı boyutunu ayarlar */
+        font-weight: normal; /* Normal yazı kalınlığı (kalın değil) */
+      }
+
+      .signature-table .divider {
+        width: 1px;
+        background-color: #000;
+      }
+
+      .signature-table .right img {
+        max-height: 80px;
+        vertical-align: middle;
+        margin-bottom: 10px;
+        margin-right: 22px;
+        margin-top: -10px;
+      }
+
+      .signature-table a {
+        text-decoration: none;
+        color: #1b7ab6;
+      }
+
+      .signature-table strong {
+        font-size: 16px;
+      }
+
+      .right {
+        text-align: center;
+        /* İçeriği ortalar */
+        position: relative;
+        /* Sosyal medya ikonlarını alta sabitlemek için gerekli */
+        padding-right: 50px;
+      }
+
+      .website-link {
+        margin-bottom: 0px; /* Daha az boşluk */
+        font-size: 12px;
+        color: #000;
+        margin-right: 14px;
+        margin-top: -30px;
+      }
+
+      .social-media-icons img {
+        width: 20px;
+        height: 20px;
+        vertical-align: middle;
+        padding-left: 20px;
+        margin-top: 2px;
+      }
+
+      .social-media-icons {
+        position: relative;
+        margin-top: 10px; /* Boşluğu küçülttük */
+        display: flex;
+        justify-content: center;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        vertical-align: middle;
+        padding: 0px;
+      }
+
+      .signature-table td {
+        padding: 0;
+        line-height: normal;
+      }
+
+      .signature-table .left p {
+        margin: 5px 0;
+        line-height: normal;
+      }
+
+      .error-message {
+        color: red;
+        font-size: 13px;
+        margin-top: -10px;
+        margin-bottom: 15px;
+        font-style: italic;
+        font-weight: bold;
+      }
+
+      .name-font {
+        font-size: 16px; /* Ünvan için font boyutunu 14px yapar */
+      }
+
+      #copyStatus {
+        display: none;
+        color: rgb(255, 255, 255);
+        font-size: 13px;
+        margin-top: 10px;
+        font-style: italic;
+        font-weight: bold;
+      }
+
+      .social-links {
+        display: flex;
+        justify-content: center;
+        gap: 4px;
+        margin-top: 20px;
+        padding-top: 30px;
+        vertical-align: middle;
+      }
+
+      .social-links a {
+        color: #fff;
+        text-decoration: none;
+        padding-top: 30px;
+      }
+
+      .social-links .divider {
+        width: 1px;
+        background-color: #fff;
+        height: 20px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>Kurumsal E-posta İmza Oluşturucu</h1>
+      <form id="signatureForm">
+        <label for="name">Ad Soyad:</label>
+        <input
+          type="text"
+          placeholder="Ömer Faruk Ekin"
+          id="name"
+          name="name"
+          required
+        />
+        <div id="nameError" class="error-message"></div>
+
+        <label for="title">Ünvan:</label>
+        <input
+          type="text"
+          placeholder="Bilgi Teknolojileri Müdürü"
+          id="title"
+          name="title"
+          required
+        />
+        <div id="titleError" class="error-message"></div>
+
+        <label for="phone">Cep Telefonu:</label>
+        <input
+          type="text"
+          placeholder="532 256 68 37"
+          id="phone"
+          name="phone"
+          required
+          oninput="formatPhoneNumber()"
+        />
+        <div id="phoneError" class="error-message"></div>
+
+        <label for="landline">Sabit Telefon :</label>
+        <input
+          type="text"
+          placeholder="312 227 02 19"
+          id="landline"
+          name="landline"
+          maxlength="13"
+          oninput="formatLandline()"
+        />
+        <div id="landlineError" class="error-message"></div>
+
+
+        <label for="extension">Dahili No :</label>
+        <input
+          type="text"
+          placeholder="5544"
+          id="extension"
+          name="extension"
+          maxlength="4"
+          type="tel"
+          oninput="validateExtension()"
+        />
+
+        <label for="email">E-posta:</label>
+        <input
+          type="email"
+          placeholder="omerfarukekin@tcddteknik.com.tr"
+          id="email"
+          name="email"
+          required
+        />
+        <div id="emailError" class="error-message"></div>
+
+        <label for="address">Adres:</label>
+        <input
+          type="text"
+          placeholder="Hoşdere Cad. No:167 Çankaya/Ankara"
+          id="address"
+          name="address"
+          required
+        />
+        <div id="addressError" class="error-message"></div>
+
+        <button type="button" onclick="generateSignature()">
+          <i class="fa-solid fa-gears" style="color: #ffffff"></i> İmza Oluştur
+        </button>
+
+        <div id="signatureSection">
+          <h2 style="color: rgb(255, 255, 255)">İmzanız:</h2>
+          <div id="signaturePreview">
+            <!-- İmza burada önizlenecek -->
+          </div>
+          <button type="button" onclick="copySignature()">
+            <i class="fa-solid fa-copy" style="color: #ffffff"></i> İmzayı
+            Kopyala
+          </button>
+          <div id="copyStatus">
+            <i class="fa-regular fa-circle-check" style="color: #ffffff"></i>
+            İmza kopyalandı!
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <script>
+      function formatPhoneNumber() {
+        const phoneInput = document.getElementById("phone");
+        let phoneValue = phoneInput.value.replace(/\D/g, ""); // Sadece rakamları al
+        if (phoneValue.length > 10) {
+          phoneValue = phoneValue.slice(0, 10); // Maksimum 10 rakam
+        }
+        // Formatla: 555 404 33 22
+        phoneValue = phoneValue.replace(
+          /(\d{3})(\d{3})(\d{2})(\d{2})/,
+          "$1 $2 $3 $4"
+        );
+        phoneInput.value = phoneValue;
+      }
+
+      function formatLandline() {
+        const landlineInput = document.getElementById("landline");
+        let landlineValue = landlineInput.value.replace(/\D/g, ""); // Sadece rakamları al
+        if (landlineValue.length > 10) {
+          landlineValue = landlineValue.slice(0, 10); // Maksimum 8 rakam
+        }
+        // Formatla: (312) 227 02 19
+        landlineValue = landlineValue.replace(
+          /(\d{3})(\d{3})(\d{2})(\d{2})/,
+          "$1 $2 $3 $4"
+        );
+        landlineInput.value = landlineValue;
+      }
+
+      function generateSignature() {
+        // Hata mesajlarını temizle
+        document.getElementById("nameError").innerText = "";
+        document.getElementById("titleError").innerText = "";
+        document.getElementById("phoneError").innerText = "";
+        document.getElementById("emailError").innerText = "";
+        document.getElementById("addressError").innerText = "";
+        document.getElementById("landlineError").innerText = ""; // Sabit telefon hatasını temizle
+
+
+        const name = document.getElementById("name").value.trim();
+        const title = document.getElementById("title").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+        const landline = document.getElementById("landline").value.trim();
+        const extension = document.getElementById("extension").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const address = document.getElementById("address").value.trim();
+
+        let isValid = true;
+
+        // Ad Soyad ve Ünvan doğrulaması
+        if (name.length === 0) {
+          document.getElementById("nameError").innerText =
+            "Lütfen adınızı ve soyadınızı girin.";
+          isValid = false;
+        }
+
+        if (title.length === 0) {
+          document.getElementById("titleError").innerText =
+            "Lütfen ünvanınızı girin.";
+          isValid = false;
+        }
+
+        // E-posta doğrulaması
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(email)) {
+          document.getElementById("emailError").innerText =
+            "Lütfen geçerli bir e-posta adresi girin.";
+          isValid = false;
+        }
+        // Telefon doğrulaması
+        if (phone.length === 0) {
+          document.getElementById("phoneError").innerText =
+            "Lütfen telefon numaranızı girin.";
+          isValid = false;
+        }
+        // Sabit telefon doğrulaması
+        if (landline.length === 0) {
+        document.getElementById("landlineError").innerText =
+            "Lütfen sabit telefon numaranızı girin.";
+          isValid = false;
+        }
+
+        
+
+        // Adres doğrulaması
+        if (address.length === 0) {
+          document.getElementById("addressError").innerText =
+            "Lütfen adresinizi girin.";
+          isValid = false;
+        }
+
+        // Eğer form geçersizse, işlemi durdur
+        if (!isValid) {
+          return;
+        }
+
+        // Sosyal medya bağlantıları sabit olarak eklenecek
+        const linkedin = "https://www.linkedin.com/company/tcdd-teknik/";
+        const instagram = "https://www.instagram.com/tcddteknik/";
+        const youtube = "https://www.youtube.com/user/tcddteknik/";
+        const x = "https://x.com/tcddteknik/";
+
+        let landlineHTML = "";
+        if (landline) {
+          if (extension) {
+            landlineHTML = `<strong><img src="images/old-phone.png" alt="Phone" style="width:20px; height:20px; vertical-align: middle;" /></strong> +90 ${landline} /  ${extension} <br>`;
+          } else {
+            landlineHTML = `<strong><img src="images/old-phone.png" alt="Phone" style="width:20px; height:20px; vertical-align: middle;" /></strong> +90 ${landline} <br>`;
+          }
+        }
+
+        // İmza HTML'si
+        const signatureHTML = `
+          <table class="signature-table">
+            <tr>
+              <td class="left">
+                <strong class="name-font">${name}</strong> <br>
+                <span class="title-font">${title}</span> <br>
+                <br>
+                <img src="images/smartphone-3.png" alt="Phone" style="width:20px; height:20px; vertical-align: middle;" /> +90 ${phone} <br>
+                ${landlineHTML}
+                <img src="images/email-2.png" alt="Email" style="width:20px; height:20px; vertical-align: middle;" /> ${email} <br>
+                <img src="images/gps (1).png" alt="Address" style="width:20px; height:20px; vertical-align: middle;" /> ${address} <br>
+              </td>
+              <td class="divider"></td>
+              <td class="right">
+  <img src="images/logo.png" alt="Şirket Logosu" /><br />
+  <a href="https://www.tcddteknik.com.tr/" class="website-link" style="color:#000000" >www.tcddteknik.com.tr</a>
+  <div class="social-media-icons" >
+    ${
+      linkedin
+        ? `<a href="${linkedin}" target="_blank"><img src="images/linkedin-2.png" alt="LinkedIn" style="width:20px; height:20px; vertical-align: middle;" /></a>`
+        : ""
+    }
+    ${
+      instagram
+        ? `<a href="${instagram}" target="_blank"><img src="images/instagram-2.png" alt="Instagram" style="width:20px; height:20px; vertical-align: middle;" /></a>`
+        : ""
+    }
+    ${
+      youtube
+        ? `<a href="${youtube}" target="_blank"><img src="images/youtube-2.png" alt="YouTube" style="width:20px; height:20px; vertical-align: middle;" /></a>`
+        : ""
+    }
+    ${
+      x
+        ? `<a href="${x}" target="_blank"><img src="images/twitter-2.png" alt="X" style="width:20px; height:20px; vertical-align: middle;" /></a>`
+        : ""
+    }
+  </div>
+</td>
+
+            </tr>
+          </table>
+          <div id="bannerSection" align="left">
+    <img src="images/banner.jpg"  style="height:100px;"  alt="Banner" />
+  </div>
+
+
+        `;
+
+        document.getElementById("signaturePreview").innerHTML = signatureHTML;
+
+        // Sayfanın otomatik olarak aşağı kaydırılması
+        document.querySelector("html").scrollTop =
+          document.querySelector("html").scrollHeight;
+      }
+
+      function formatLandline() {
+        const landlineInput = document.getElementById("landline");
+        let landlineValue = landlineInput.value.replace(/\D/g, ""); // Sadece rakamları al
+
+        if (landlineValue.length >= 3) {
+          landlineValue = landlineValue.replace(
+            /(\d{3})(\d{0,3})(\d{0,2})(\d{0,2})/,
+            "$1 $2 $3 $4"
+          );
+        }
+
+        landlineInput.value = landlineValue.trim();
+      }
+
+      function validateExtension() {
+        const extensionInput = document.getElementById("extension");
+        const extensionValue = extensionInput.value;
+
+        // Rakam dışında karakter girişini engelle
+        extensionInput.value = extensionValue.replace(/\D/g, "");
+      }
+
+      function copySignature() {
+        const signaturePreview = document.getElementById("signaturePreview");
+        const range = document.createRange();
+        range.selectNodeContents(signaturePreview);
+        const selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+
+        try {
+          const successful = document.execCommand("copy");
+          const msg = successful ? "successful" : "unsuccessful";
+          console.log("Copy command was " + msg);
+
+          // Kopyalama başarılı olduğunda durumu göster
+          document.getElementById("copyStatus").style.display = "block";
+        } catch (err) {
+          console.log("Oops, unable to copy");
+        }
+
+        // Seçimi temizle
+        selection.removeAllRanges();
+      }
+    </script>
+  </body>
+</html>
